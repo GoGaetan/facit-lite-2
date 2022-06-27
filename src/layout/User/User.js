@@ -16,7 +16,7 @@ const User = () => {
 	const navigate = useNavigate();
 	const handleItem = useNavigationItemHandle();
 	const { darkModeStatus, setDarkModeStatus } = useDarkMode();
-
+	const { user } = useContext(AuthContext);
 	const [collapseStatus, setCollapseStatus] = useState(false);
 
 	const { t } = useTranslation(['translation', 'menu']);
@@ -46,15 +46,15 @@ const User = () => {
 				<div className='user-info'>
 					<div className='user-name'>
 						<Popovers title='User.js' desc={<code>src/layout/User/User.js</code>}>
-							User
+							{user ? user.username : ''}
 						</Popovers>
-						<code className='ps-2'>User.js</code>
+						<code className='ps-2'>{user ? user.role : ''}</code>
 					</div>
 					<div className='user-sub-title'>
 						<Popovers title='User.js' desc={<code>src/layout/User/User.js</code>}>
-							User
+							{user ? user.email : ''}
 						</Popovers>
-						<code className='ps-2'>User.js</code>
+						{/* <code className='ps-2'>User.js</code> */}
 					</div>
 				</div>
 			</div>

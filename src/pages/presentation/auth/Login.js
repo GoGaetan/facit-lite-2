@@ -101,6 +101,10 @@ const Login = ({ isSignUp }) => {
 		setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
 	};
 
+	const handleSubmit = (event) => {
+		event.preventDefault(); // 👈️ prevent page refresh
+	};
+
 	const navigate = useNavigate();
 	const handleOnClick = async (e) => {
 		e.preventDefault();
@@ -115,7 +119,8 @@ const Login = ({ isSignUp }) => {
 
 		dispatch({ type: 'LOGIN_START' });
 		try {
-			const res = await axios.post('/auth/login', credentials);
+			// ${process.env.REACT_APP_API_BASE_URL}
+			const res = await axios.post(`/auth/login`, credentials);
 			if (res.data.isAdmin) {
 				dispatch({ type: 'LOGIN_SUCCESS', payload: res.data.details });
 				navigate('/');
@@ -154,20 +159,23 @@ const Login = ({ isSignUp }) => {
 								</div>
 								<LoginHeader isNewUser={isNewUser} />
 
-								<form className='row g-4'>
+								<form className='row g-4' onSubmit={handleSubmit}>
 									<div className='col-12'>
 										{!usernameInput ? (
 											<FormGroup
 												id='username'
 												isFloating
-												label='Your email or username'>
+												label='Your Username'>
 												<Input
 													autoComplete='username'
 													onChange={handleChange}
 												/>
 											</FormGroup>
 										) : (
-											<FormGroup id='password' isFloating label='Password'>
+											<FormGroup
+												id='password'
+												isFloating
+												label='Your Password'>
 												<Input
 													type='password'
 													autoComplete='password'

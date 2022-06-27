@@ -48,6 +48,9 @@ const FinancialsState = () => {
 
 	// eslint-disable-next-line no-console
 	console.log('path:', path);
+	// ${process.env.REACT_APP_API_BASE_URL}
+	// eslint-disable-next-line no-console
+	console.log('REACT_APP_API_BASE_URL Financial State:', `/${path}`);
 	// eslint-disable-next-line no-unused-vars
 	const { data } = useFetch(`/${path}`);
 
@@ -63,9 +66,13 @@ const FinancialsState = () => {
 	const handleNextLoad = async (e) => {
 		e.preventDefault();
 		try {
-			await axios.post(`/${path}`, { lastId: list.slice(-1)[0].id }).then((datas) => {
-				setList(datas != null ? [...list, ...datas.data] : [...list]);
-			});
+			await axios
+				.post(`/${path}`, {
+					lastId: list.slice(-1)[0].id,
+				})
+				.then((datas) => {
+					setList(datas != null ? [...list, ...datas.data] : [...list]);
+				});
 		} catch (err) {
 			// eslint-disable-next-line no-console
 			console.log('err catched:', err);

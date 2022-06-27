@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import moment from 'moment';
+import { DateRangePicker } from 'react-date-range';
 import { useLocation } from 'react-router-dom';
 import useFetch from '../../../hooks/useFetch';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
@@ -12,9 +13,15 @@ import SubHeader, {
 } from '../../../layout/SubHeader/SubHeader';
 import Page from '../../../layout/Page/Page';
 import { demoPages } from '../../../menu';
-import Card, { CardBody } from '../../../components/bootstrap/Card';
-import { priceFormat } from '../../../helpers/helpers';
-// import data from '../../../common/data/dummyCustomerData';   getFirstLetter, s
+import Card, {
+	CardBody,
+	CardHeader,
+	CardTitle,
+	CardLabel,
+	CardActions,
+} from '../../../components/bootstrap/Card';
+import { getFirstLetter, priceFormat } from '../../../helpers/helpers';
+// import data from '../../../common/data/dummyCustomerData';   ,
 import PaginationButtons, {
 	dataPagination,
 	PER_COUNT,
@@ -34,19 +41,22 @@ import useSortableData from '../../../hooks/useSortableData';
 import InputGroup, { InputGroupText } from '../../../components/bootstrap/forms/InputGroup';
 import Popovers from '../../../components/bootstrap/Popovers';
 import CustomerEditModal from './CustomerEditModal';
-// import { getColorNameWithIndex } from '../../../common/data/enumColors';
-// import useDarkMode from '../../../hooks/useDarkMode';
+
+import { getColorNameWithIndex } from '../../../common/data/enumColors';
+import useDarkMode from '../../../hooks/useDarkMode';
+// import DownloadTransactionsCSVButton from '../../common/DownloadTransactionsCSVButton';
+import DownloadTransactionCSVButton from '../../common/DownloadTransactionCSVButton';
 
 const CustomersList = () => {
 	const [list, setList] = useState([]);
-
-	// const { darkModeStatus } = useDarkMode();
+	const { themeStatus, darkModeStatus } = useDarkMode();
 
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['10']);
 
 	const location = useLocation();
 	const path = location.pathname.split('/')[1];
+
 	// eslint-disable-next-line no-unused-vars
 	const { data } = useFetch(`/${path}`);
 
@@ -54,58 +64,23 @@ const CustomersList = () => {
 		setList(data);
 	}, [data]);
 
-	// eslint-disable-next-line no-console
-	console.log('data:', data);
-	// eslint-disable-next-line no-console
-	console.log('list:', list);
+	// console.log('REACT_APP_API_BASE_URL:', `${process.env.REACT_APP_API_BASE_URL}/${path}`);
 
 	const handleNextLoad = async (e) => {
 		e.preventDefault();
 		try {
-			await axios.post(`/${path}`, { lastId: list.slice(-1)[0].id }).then((datas) => {
-				setList(datas != null ? [...list, ...datas.data] : [...list]);
-			});
+			await axios
+				.post(`/${path}/getTransactions/`, {
+					lastId: list.slice(-1)[0]._id,
+				})
+				.then((datas) => {
+					setList(datas != null ? [...list, ...datas.data] : [...list]);
+				});
 		} catch (err) {
 			// eslint-disable-next-line no-console
 			console.log('err catched:', err);
 		}
 	};
-
-	/*
-													<td>
-														<div className='flex-shrink-0'>
-															<div
-																className='ratio ratio-1x1 me-3'
-																style={{ width: 48 }}>
-																<div
-																	className={`bg-l${
-																		darkModeStatus
-																			? 'o25'
-																			: '25'
-																	}-${getColorNameWithIndex(
-																		index,
-																	)} text-${getColorNameWithIndex(
-																		index,
-																	)} rounded-2 d-flex align-items-center justify-content-center`}>
-																	<span className='fw-bold'>
-																		{i.userId.IsMerchant ===
-																		false
-																			? getFirstLetter(
-																					i.userId.Profile
-																						.FirstName,
-																			  )
-																			: getFirstLetter(
-																					i
-																						.DestinationUserId
-																						.Profile
-																						.FirstName,
-																			  )}
-																	</span>
-																</div>
-															</div>
-														</div>
-													</td>
-*/
 
 	// , loading, error
 
@@ -127,7 +102,7 @@ const CustomersList = () => {
 		(f) =>
 			// Name
 			(f.userId.IsMerchant === false
-				? f.id.toLowerCase().includes(formik.values.searchInput.toLowerCase()) ||
+				? f._id.toLowerCase().includes(formik.values.searchInput.toLowerCase()) ||
 				  f.userId.Profile.FirstName.toLowerCase().includes(
 						formik.values.searchInput.toLowerCase(),
 				  ) ||
@@ -135,7 +110,7 @@ const CustomersList = () => {
 						formik.values.searchInput.toLowerCase(),
 				  ) ||
 				  f.Amount.toString().includes(formik.values.searchInput.toLowerCase())
-				: f.id.toLowerCase().includes(formik.values.searchInput.toLowerCase()) ||
+				: f._id.toLowerCase().includes(formik.values.searchInput.toLowerCase()) ||
 				  f.DestinationUserId.Profile.FirstName.toLowerCase().includes(
 						formik.values.searchInput.toLowerCase(),
 				  ) ||
@@ -163,6 +138,28 @@ const CustomersList = () => {
 			Object.keys(COUNTRIES).map((i) => COUNTRIES[i].name),
 		);
 	};
+
+	const [state, setState] = useState({
+		selection: {
+			startDate: moment().startOf('week').add('-1', 'week').toDate(),
+			endDate: moment().endOf('week').toDate(),
+			key: 'selection',
+		},
+	});
+
+	const datePicker = (
+		<DateRangePicker
+			onChange={(item) => setState({ ...state, ...item })}
+			showSelectionPreview
+			moveRangeOnFirstSelection={false}
+			retainEndDateOnFirstSelection={false}
+			months={2}
+			ranges={[state.selection]}
+			direction='horizontal'
+			rangeColors={[process.env.REACT_APP_PRIMARY_COLOR]}
+		/>
+	);
+
 	return (
 		<PageWrapper title={demoPages.transactions.text}>
 			<SubHeader>
@@ -176,7 +173,7 @@ const CustomersList = () => {
 						id='searchInput'
 						type='search'
 						className='border-0 shadow-none bg-transparent'
-						placeholder='Search transaction by Name, Tx Id or Amount...'
+						placeholder='Filter transaction by Tx Id or Amount...'
 						onChange={formik.handleChange}
 						value={formik.values.searchInput}
 					/>
@@ -290,6 +287,33 @@ const CustomersList = () => {
 				<div className='row h-100'>
 					<div className='col-12'>
 						<Card stretch>
+							<CardHeader>
+								<CardLabel iconColor='info'>
+									<CardTitle>Last Transactions</CardTitle>
+								</CardLabel>
+								<CardActions>
+									<Popovers
+										placement='bottom-end'
+										className='mw-100 overflow-hidden'
+										data-tour='date-range-menu'
+										bodyClassName='p-0'
+										trigger='click'
+										desc={datePicker}>
+										<Button color='dark' isLight data-tour='date-range'>
+											{`${moment(state.selection.startDate).format(
+												'MMM Do YY',
+											)} - ${moment(state.selection.endDate).format(
+												'MMM Do YY',
+											)}`}
+										</Button>
+									</Popovers>
+									<DownloadTransactionCSVButton
+										color={themeStatus}
+										startDate={state.selection.startDate}
+										endDate={state.selection.endDate}
+									/>
+								</CardActions>
+							</CardHeader>
 							<CardBody isScrollable className='table-responsive'>
 								<table className='table table-modern table-hover'>
 									<thead>
@@ -330,36 +354,62 @@ const CustomersList = () => {
 														<div className='d-flex align-items-center'>
 															<div className='flex-grow-1'>
 																<div className='fs-6 fw-bold'>
-																	{i.userId.IsMerchant === false
+																	{/*
+                                   i.userId.IsMerchant === false
 																		? `${i.userId.Profile.FirstName} ${i.userId.Profile.LastName}`
-																		: `${i.DestinationUserId.Profile.FirstName} ${i.DestinationUserId.Profile.LastName}`}
-																</div>
-																<div className='text-muted'>
-																	<small>
-																		<Button
-																			isLink
-																			color='light'
-																			icon='Email'
-																			className='text-lowercase'
-																			tag='a'
-																			href={`mailto:${
-																				i.userId
-																					.IsMerchant ===
-																				false
-																					? i.userId.Profile.Email.toLowerCase()
-																					: i.DestinationUserId.Profile.Email.toLowerCase()
-																			}`}>
-																			{i.userId.IsMerchant ===
-																			false
-																				? `${i.userId.Profile.Email}`
-																				: `${i.DestinationUserId.Profile.Email}`}
-																		</Button>
-																	</small>
+                      : `${i.DestinationUserId.Profile.FirstName} ${i.DestinationUserId.Profile.LastName}` 
+                    */}
+																	<div className='flex-shrink-0'>
+																		<div
+																			className='ratio ratio-1x1 me-3'
+																			style={{ width: 48 }}>
+																			<div
+																				className={`bg-l${
+																					darkModeStatus
+																						? 'o25'
+																						: '25'
+																				}-${getColorNameWithIndex(
+																					index,
+																				)} text-${getColorNameWithIndex(
+																					index,
+																				)} rounded-2 d-flex align-items-center justify-content-center`}>
+																				<span className='fw-bold'>
+																					{i.userId
+																						.IsMerchant ===
+																					false
+																						? (getFirstLetter(
+																								i
+																									.userId
+																									.Profile
+																									.FirstName,
+																						  ),
+																						  getFirstLetter(
+																								i
+																									.userId
+																									.Profile
+																									.LastName,
+																						  ))
+																						: (getFirstLetter(
+																								i
+																									.DestinationUserId
+																									.Profile
+																									.FirstName,
+																						  ),
+																						  getFirstLetter(
+																								i
+																									.DestinationUserId
+																									.Profile
+																									.LastName,
+																						  ))}
+																				</span>
+																			</div>
+																		</div>
+																	</div>
 																</div>
 															</div>
 														</div>
 													</td>
-													<td>{i.id}</td>
+													<td>{i._id}</td>
 													<td>
 														<div>{moment.utc(i.Date).format('ll')}</div>
 														<div>
@@ -418,7 +468,7 @@ const CustomersList = () => {
 																	<Button
 																		icon='Visibility'
 																		tag='a'
-																		to={`../${demoPages.transactionID.path}/${i.id}`}>
+																		to={`../${demoPages.transactionID.path}/${i._id}`}>
 																		View
 																	</Button>
 																</DropdownItem>

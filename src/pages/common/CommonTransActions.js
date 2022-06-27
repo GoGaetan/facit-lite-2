@@ -12,7 +12,7 @@ import Card, {
 } from '../../components/bootstrap/Card';
 import Button from '../../components/bootstrap/Button';
 // import Badge from '../../components/bootstrap/Badge';
-// import Chart from '../../components/extras/Chart';
+import Chart from '../../components/extras/Chart';
 
 // import { demoPages } from '../../menu';
 
@@ -37,41 +37,45 @@ import PaginationButtons, { dataPagination, PER_COUNT } from '../../components/P
 import useSortableData from '../../hooks/useSortableData';
 
 // eslint-disable-next-line react/prop-types
-const TableRow = ({ id, data, date }) => {
+const TableRow = ({ id, data, date, series, color }) => {
 	// const { darkModeStatus } = useDarkMode();
-
-	// const dummyOptions = {
-	// 	colors: [color],
-	// 	chart: {
-	// 		type: 'line',
-	// 		width: 100,
-	// 		height: 35,
-	// 		sparkline: {
-	// 			enabled: true,
-	// 		},
+	// const series_ = [
+	// 	{
+	// 		data: [25, 66, 41, 89, 63],
 	// 	},
-	// 	tooltip: {
-	// 		theme: 'dark',
-	// 		fixed: {
-	// 			enabled: false,
-	// 		},
-	// 		x: {
-	// 			show: false,
-	// 		},
-	// 		y: {
-	// 			title: {
-	// 				// eslint-disable-next-line no-unused-vars
-	// 				formatter(seriesName) {
-	// 					return '';
-	// 				},
-	// 			},
-	// 		},
-	// 	},
-	// 	stroke: {
-	// 		curve: 'smooth',
-	// 		width: 2,
-	// 	},
-	// };
+	// ];
+	const dummyOptions = {
+		colors: [color],
+		chart: {
+			type: 'line',
+			width: 100,
+			height: 35,
+			sparkline: {
+				enabled: true,
+			},
+		},
+		tooltip: {
+			theme: 'dark',
+			fixed: {
+				enabled: false,
+			},
+			x: {
+				show: false,
+			},
+			y: {
+				title: {
+					// eslint-disable-next-line no-unused-vars
+					formatter(seriesName) {
+						return '';
+					},
+				},
+			},
+		},
+		stroke: {
+			curve: 'smooth',
+			width: 2,
+		},
+	};
 	return (
 		<tr>
 			<th scope='row'>{id}</th>
@@ -103,16 +107,15 @@ const TableRow = ({ id, data, date }) => {
 				}
 			</td>
 			<td>
-				{/*
-        <Chart
+				<Chart
 					series={series}
 					options={dummyOptions}
 					type={dummyOptions.chart.type}
 					height={dummyOptions.chart.height}
 					width={dummyOptions.chart.width}
-          />
-        */}
-				Serie
+				/>
+				{/*
+				Serie */}
 			</td>
 			<td>
 				<span>
@@ -170,7 +173,7 @@ const CommonTransActions = ({ data }) => {
 			: [];
 
 	const [currentPage, setCurrentPage] = useState(1);
-	const [perPage, setPerPage] = useState(PER_COUNT['3']);
+	const [perPage, setPerPage] = useState(PER_COUNT['10']);
 	const { items, requestSort, getClassNamesFor } = useSortableData(filteredDataPayment);
 
 	// const [sales] = useState({
@@ -299,7 +302,7 @@ const CommonTransActions = ({ data }) => {
 													<div className='flex-grow-1 ms-3'>
 														<div
 															className={classNames(
-																'fw-bold fs-3 mb-0',
+																'fw-bold fs-4 mb-0',
 																{
 																	'text-muted': !darkModeStatus,
 																	'text-light': darkModeStatus,
@@ -317,7 +320,7 @@ const CommonTransActions = ({ data }) => {
 														</div>
 														<div
 															className={classNames(
-																'fw-bold fs-3 mb-0',
+																'fw-bold fs-4 mb-0',
 																{
 																	'text-muted': !darkModeStatus,
 																	'text-light': darkModeStatus,
@@ -335,7 +338,7 @@ const CommonTransActions = ({ data }) => {
 														</div>
 														<div
 															className={classNames(
-																'fw-bold fs-3 mb-0',
+																'fw-bold fs-4 mb-0',
 																{
 																	'text-muted': !darkModeStatus,
 																	'text-light': darkModeStatus,
@@ -594,7 +597,7 @@ const CommonTransActions = ({ data }) => {
 									icon='CloudDownload'
 									isLight
 									tag='a'
-									to='/somefile.txt'
+									to='#'
 									target='_blank'
 									download>
 									Export

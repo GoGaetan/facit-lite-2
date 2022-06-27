@@ -10,8 +10,8 @@ import Dropdown, {
 	DropdownMenu,
 	DropdownToggle,
 } from '../../../components/bootstrap/Dropdown';
-import showNotification from '../../../components/extras/showNotification';
-import Icon from '../../../components/icon/Icon';
+// import showNotification from '../../../components/extras/showNotification';
+// import Icon from '../../../components/icon/Icon';
 import Spinner from '../../../components/bootstrap/Spinner';
 
 const DashboardHeader = () => {
@@ -26,15 +26,16 @@ const DashboardHeader = () => {
 	const { i18n } = useTranslation();
 
 	const changeLanguage = (lng) => {
-		i18n.changeLanguage(lng).then(() =>
-			showNotification(
-				<span className='d-flex align-items-center'>
-					<Icon icon={getLangWithKey(lng)?.icon} size='lg' className='me-1' />
-					<span>{`Language changed to ${getLangWithKey(lng)?.text}`}</span>
-				</span>,
-				'You updated the language of the site. (Only "Aside" was prepared as an example.)',
-			),
-		);
+		i18n.changeLanguage(lng);
+		// .then(() =>
+		// 	showNotification(
+		// 		<span className='d-flex align-items-center'>
+		// 			<Icon icon={getLangWithKey(lng)?.icon} size='lg' className='me-1' />
+		// 			<span>{`Language changed to ${getLangWithKey(lng)?.text}`}</span>
+		// 		</span>,
+		// 		'You updated the language of the site. (Only "Aside" was prepared as an example.)',
+		// 	),
+		// );
 	};
 
 	/**
@@ -47,23 +48,27 @@ const DashboardHeader = () => {
 	return (
 		<Header>
 			<HeaderLeft>
-				<Popovers
+				{/*
+        <Popovers
 					title='DashboardHeader.js'
 					desc={<code>src/pages/common/Headers/DashboardHeader.js</code>}>
 					HeaderLeft
 				</Popovers>
 				<code>DashboardHeader.js</code>
+        */}
 			</HeaderLeft>
 
 			<HeaderRight>
 				<div className='row g-3 align-items-center'>
 					<div className='col-auto'>
-						<Popovers
+						{/*
+            <Popovers
 							title='DashboardHeader.js'
 							desc={<code>src/pages/common/Headers/DashboardHeader.js</code>}>
-							HeaderRight
+								HeaderRight 
 						</Popovers>
-						<code className='ps-3'>DashboardHeader.js</code>
+          */}
+						<code className='ps-3'>{/* DashboardHeader.js */}</code>
 					</div>
 					{/* Dark Mode */}
 					<div className='col-auto'>

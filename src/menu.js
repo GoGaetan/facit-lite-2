@@ -58,6 +58,13 @@ export const demoPages = {
 		path: 'transactions/transaction',
 		hide: true,
 	},
+	transaction: {
+		id: 'transaction',
+		text: 'transaction',
+		path: 'transactions/transaction/1',
+		icon: 'Badge',
+		hide: true,
+	},
 	financialStates: {
 		id: 'financialsStates',
 		text: 'Financial State',

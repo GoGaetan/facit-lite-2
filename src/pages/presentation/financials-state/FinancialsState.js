@@ -66,6 +66,12 @@ const TransActionsPage = () => {
 
 	// eslint-disable-next-line no-console
 	console.log('path:', path);
+	// eslint-disable-next-line no-console
+	console.log(
+		'REACT_APP_API_BASE_URL Financial State:',
+		`${process.env.REACT_APP_API_BASE_URL}/${path}`,
+	);
+	// ${process.env.REACT_APP_API_BASE_URL}
 	// eslint-disable-next-line no-unused-vars
 	const { data } = useFetch(`/${path}`);
 

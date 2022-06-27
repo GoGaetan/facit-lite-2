@@ -1,5 +1,5 @@
 {
-	"name": "CLAPAY",
+	"name": "clapay",
 	"version": "2.2",
 	"private": true,
 	"scripts": {
@@ -49,6 +49,7 @@
 		"dayjs": "^1.11.2",
 		"formik": "^2.2.9",
 		"framer-motion": "^6.3.3",
+		"http-proxy-middleware": "^2.0.6",
 		"i18next": "^21.8.0",
 		"i18next-browser-languagedetector": "^6.1.4",
 		"i18next-http-backend": "^1.4.0",
@@ -62,6 +63,7 @@
 		"react-apexcharts": "^1.4.0",
 		"react-big-calendar": "^0.40.1",
 		"react-credit-cards": "^0.8.3",
+		"react-csv": "^2.2.2",
 		"react-date-range": "^1.4.0",
 		"react-dom": "^18.1.0",
 		"react-i18next": "^11.16.9",
@@ -123,5 +125,5 @@
 	"overrides": {
 		"autoprefixer": "10.4.5"
 	},
-    "proxy": "http://localhost:8800/api"
+	"proxy": "http://localhost:8900"
 }

@@ -2,23 +2,23 @@ const LANG = {
 	EN: {
 		text: 'English',
 		lng: 'en-US',
-		icon: 'CustomUsa',
+		icon: 'CustomUk',
 	},
-	DE: {
-		text: 'Deutsche',
-		lng: 'de-DE',
-		icon: 'CustomGermany',
-	},
+	// DE: {
+	// 	text: 'Deutsche',
+	// 	lng: 'de-DE',
+	// 	icon: 'CustomGermany',
+	// },
 	FR: {
 		text: 'Français',
 		lng: 'fr-FR',
 		icon: 'CustomFrance',
 	},
-	TR: {
-		text: 'Türkçe',
-		lng: 'tr-TR',
-		icon: 'CustomTurkey',
-	},
+	// TR: {
+	// 	text: 'Türkçe',
+	// 	lng: 'tr-TR',
+	// 	icon: 'CustomTurkey',
+	// },
 };
 
 export const getLangWithKey = (key) => {

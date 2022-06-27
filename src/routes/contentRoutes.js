@@ -21,7 +21,7 @@ const PAGE_LAYOUTS = {
 const APP = {
 	TRANSACTIONS: {
 		TRANSACTIONS: lazy(() => import('../pages/presentation/transactions/TransactionsList')),
-		// TRANSACTION: lazy(() => import('../pages/presentation/crm/Customer')),
+		TRANSACTION: lazy(() => import('../pages/presentation/transactions/Transaction')),
 		// SALES: lazy(() => import('../pages/presentation/crm/Sales')),
 		// INVOICE: lazy(() => import('../pages/presentation/crm/Invoice')),
 	},
@@ -107,6 +107,13 @@ const presentation = [
 		element: <APP.TRANSACTIONS.TRANSACTIONS />,
 		exact: true,
 	},
+	{
+		// path: demoPages.transaction.path,
+		path: `${demoPages.transactionID.path}/:id`,
+		element: <APP.TRANSACTIONS.TRANSACTION />,
+		exact: true,
+	},
+
 	/**
 	 * App > FINANCIALS
 	 */
